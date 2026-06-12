@@ -1,0 +1,180 @@
+-- DevLog 시드 데이터 (supabase db seed 로 실행)
+
+INSERT INTO public.categories (id, name, slug) VALUES
+  ('a1000000-0000-4000-8000-000000000001', 'Rust', 'rust'),
+  ('a1000000-0000-4000-8000-000000000002', 'TypeScript', 'typescript'),
+  ('a1000000-0000-4000-8000-000000000003', 'Docker', 'docker'),
+  ('a1000000-0000-4000-8000-000000000004', 'Go', 'go'),
+  ('a1000000-0000-4000-8000-000000000005', 'React', 'react')
+ON CONFLICT (slug) DO NOTHING;
+
+INSERT INTO public.posts (
+  id,
+  title,
+  slug,
+  excerpt,
+  featured_image_url,
+  author_name,
+  author_avatar_url,
+  category_id,
+  tags,
+  is_featured,
+  published_at
+) VALUES
+  (
+    'b1000000-0000-4000-8000-000000000001',
+    'React 19의 동시성 렌더링의 미래',
+    'react-19-concurrent-rendering',
+    'React 19의 새로운 reconciler 아키텍처가 동시성 렌더링과 서버 컴포넌트를 어떻게 바꾸는지, 그리고 개발자 경험에 어떤 변화가 오는지 살펴봅니다.',
+    'https://images.unsplash.com/photo-1511467687858-23d96c786e82?w=1200&h=800&fit=crop',
+    'DevLog Team',
+    'https://api.dicebear.com/7.x/avataaars/svg?seed=devlog',
+    'a1000000-0000-4000-8000-000000000005',
+    ARRAY['react', 'frontend'],
+    true,
+    '2024-10-01 09:00:00+00'
+  ),
+  (
+    'b1000000-0000-4000-8000-000000000002',
+    '가비지 컬렉터 없이 실현하는 메모리 안전성',
+    'memory-safety-without-gc',
+    'Rust의 소유권 시스템이 컴파일 타임에 메모리 안전성을 보장하는 원리와, GC 기반 언어와의 트레이드오프를 정리합니다.',
+    NULL,
+    'Alex Chen',
+    'https://api.dicebear.com/7.x/avataaars/svg?seed=alex',
+    'a1000000-0000-4000-8000-000000000001',
+    ARRAY['rust', 'systems'],
+    false,
+    '2024-10-12 10:00:00+00'
+  ),
+  (
+    'b1000000-0000-4000-8000-000000000003',
+    'TypeScript 5.x 타입 시스템 심화',
+    'typescript-5-type-system',
+    '조건부 타입, 템플릿 리터럴 타입, satisfies 연산자를 활용해 더 안전한 API 레이어를 설계하는 방법을 소개합니다.',
+    NULL,
+    'Kim Minji',
+    'https://api.dicebear.com/7.x/avataaars/svg?seed=minji',
+    'a1000000-0000-4000-8000-000000000002',
+    ARRAY['typescript', 'types'],
+    false,
+    '2024-10-11 14:00:00+00'
+  ),
+  (
+    'b1000000-0000-4000-8000-000000000004',
+    'Docker Compose로 로컬 개발 환경 표준화하기',
+    'docker-compose-local-dev',
+    '팀 전체가 동일한 개발 환경을 쓰도록 Compose 파일을 구성하고, 볼륨·네트워크·헬스체크를 설정하는 실전 가이드입니다.',
+    NULL,
+    'Park Joon',
+    'https://api.dicebear.com/7.x/avataaars/svg?seed=joon',
+    'a1000000-0000-4000-8000-000000000003',
+    ARRAY['docker', 'devops'],
+    false,
+    '2024-10-10 08:30:00+00'
+  ),
+  (
+    'b1000000-0000-4000-8000-000000000005',
+    'Go 1.22의 range-over-function 패턴',
+    'go-range-over-function',
+    'Go 1.22에서 도입된 range-over-function 이터레이터 패턴으로 커스텀 시퀀스를 깔끔하게 다루는 방법을 설명합니다.',
+    NULL,
+    'Lee Sora',
+    'https://api.dicebear.com/7.x/avataaars/svg?seed=sora',
+    'a1000000-0000-4000-8000-000000000004',
+    ARRAY['go', 'language'],
+    false,
+    '2024-10-09 16:00:00+00'
+  ),
+  (
+    'b1000000-0000-4000-8000-000000000006',
+    'React Server Components 실전 패턴',
+    'react-server-components-patterns',
+    'App Router 환경에서 Server/Client Component 경계를 설계하고, 데이터 페칭과 상호작용을 분리하는 패턴을 정리합니다.',
+    NULL,
+    'DevLog Team',
+    'https://api.dicebear.com/7.x/avataaars/svg?seed=devlog',
+    'a1000000-0000-4000-8000-000000000005',
+    ARRAY['react', 'nextjs'],
+    false,
+    '2024-10-08 11:00:00+00'
+  ),
+  (
+    'b1000000-0000-4000-8000-000000000007',
+    'Rust async/await 런타임 비교',
+    'rust-async-runtime-comparison',
+    'Tokio, async-std, smol 등 주요 Rust async 런타임의 특성과 선택 기준을 비교합니다.',
+    NULL,
+    'Alex Chen',
+    'https://api.dicebear.com/7.x/avataaars/svg?seed=alex',
+    'a1000000-0000-4000-8000-000000000001',
+    ARRAY['rust', 'async'],
+    false,
+    '2024-10-07 09:00:00+00'
+  ),
+  (
+    'b1000000-0000-4000-8000-000000000008',
+    'TypeScript strict 모드 마이그레이션',
+    'typescript-strict-migration',
+    '점진적으로 strict 옵션을 켜며 레거시 JavaScript 코드베이스를 타입 안전하게 전환하는 단계별 전략입니다.',
+    NULL,
+    'Kim Minji',
+    'https://api.dicebear.com/7.x/avataaars/svg?seed=minji',
+    'a1000000-0000-4000-8000-000000000002',
+    ARRAY['typescript', 'migration'],
+    false,
+    '2024-10-06 13:00:00+00'
+  ),
+  (
+    'b1000000-0000-4000-8000-000000000009',
+    '멀티스테이지 Docker 빌드 최적화',
+    'docker-multistage-build',
+    '이미지 크기를 줄이고 빌드 캐시를 활용하는 멀티스테이지 Dockerfile 작성법과 CI 파이프라인 연동 팁입니다.',
+    NULL,
+    'Park Joon',
+    'https://api.dicebear.com/7.x/avataaars/svg?seed=joon',
+    'a1000000-0000-4000-8000-000000000003',
+    ARRAY['docker', 'ci'],
+    false,
+    '2024-10-05 10:00:00+00'
+  ),
+  (
+    'b1000000-0000-4000-8000-000000000010',
+    'Go 워커 풀과 채널 패턴',
+    'go-worker-pool-channels',
+    '고루틴과 채널을 이용한 워커 풀 구현, 백프레셔 처리, graceful shutdown까지 실무 예제로 다룹니다.',
+    NULL,
+    'Lee Sora',
+    'https://api.dicebear.com/7.x/avataaars/svg?seed=sora',
+    'a1000000-0000-4000-8000-000000000004',
+    ARRAY['go', 'concurrency'],
+    false,
+    '2024-10-04 15:00:00+00'
+  ),
+  (
+    'b1000000-0000-4000-8000-000000000011',
+    'React 19 use() 훅 활용법',
+    'react-19-use-hook',
+    'Promise와 Context를 use()로 소비하는 새로운 패턴과 Suspense 경계 설계 방법을 소개합니다.',
+    NULL,
+    'DevLog Team',
+    'https://api.dicebear.com/7.x/avataaars/svg?seed=devlog',
+    'a1000000-0000-4000-8000-000000000005',
+    ARRAY['react', 'hooks'],
+    false,
+    '2024-10-03 12:00:00+00'
+  ),
+  (
+    'b1000000-0000-4000-8000-000000000012',
+    'Rust WASM과 프론트엔드 연동',
+    'rust-wasm-frontend',
+    'wasm-pack으로 Rust 모듈을 빌드하고 JavaScript/TypeScript 프로젝트에 통합하는 end-to-end 가이드입니다.',
+    NULL,
+    'Alex Chen',
+    'https://api.dicebear.com/7.x/avataaars/svg?seed=alex',
+    'a1000000-0000-4000-8000-000000000001',
+    ARRAY['rust', 'wasm'],
+    false,
+    '2024-10-02 08:00:00+00'
+  )
+ON CONFLICT (slug) DO NOTHING;

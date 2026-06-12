@@ -1,0 +1,8 @@
+# Supabase CLI 설정
+# https://supabase.com/docs/guides/cli/config
+
+project_id = "devlog-blog"
+
+[db.seed]
+enabled = true
+sql_paths = ["./seed.sql"]
