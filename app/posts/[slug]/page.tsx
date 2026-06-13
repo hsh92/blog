@@ -4,6 +4,8 @@ import { PostDetail } from "@/components/post/post-detail";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { getPostComments, getPostEngagement } from "@/lib/posts/get-engagement";
+import { getPostBySlug } from "@/lib/posts/get-post";
+import { buildPostPath, normalizePostSlug } from "@/lib/posts/slug";
 import { createClient } from "@/lib/supabase/server";
 
 type PostPageProps = {
@@ -14,25 +16,11 @@ function getSiteUrl() {
   return process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 }
 
-async function getPost(slug: string) {
-  const supabase = await createClient();
-
-  const { data: post } = await supabase
-    .from("posts")
-    .select("*, categories(id, name, slug)")
-    .eq("slug", slug)
-    .not("published_at", "is", null)
-    .lte("published_at", new Date().toISOString())
-    .maybeSingle();
-
-  return post;
-}
-
 export async function generateMetadata({
   params,
 }: PostPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = await getPost(slug);
+  const post = await getPostBySlug(slug);
 
   if (!post) {
     return { title: "게시글을 찾을 수 없습니다" };
@@ -59,13 +47,14 @@ export default async function PostPage({ params }: PostPageProps) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const post = await getPost(slug);
+  const post = await getPostBySlug(slug);
 
   if (!post) {
     notFound();
   }
 
-  const shareUrl = `${getSiteUrl()}/posts/${slug}`;
+  const canonicalSlug = normalizePostSlug(post.slug);
+  const shareUrl = `${getSiteUrl()}${buildPostPath(canonicalSlug)}`;
 
   const [engagement, comments] = await Promise.all([
     getPostEngagement(post.id, user?.id ?? null),

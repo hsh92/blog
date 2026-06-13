@@ -42,9 +42,14 @@ function LockIcon() {
   );
 }
 
-export function LoginForm() {
+type LoginFormProps = {
+  redirectTo?: string;
+};
+
+export function LoginForm({ redirectTo = "/" }: LoginFormProps) {
   return (
     <form action={loginAction} className="space-y-5">
+      <input type="hidden" name="next" value={redirectTo} />
       <div className="space-y-2">
         <h2 className="text-2xl font-semibold text-white">환영합니다</h2>
         <p className="text-sm text-devlog-muted">기술 여정을 계속해 보세요.</p>

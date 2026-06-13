@@ -5,9 +5,10 @@ import { SignupForm } from "@/components/auth/signup-form";
 
 type AuthCardProps = {
   activeTab: "login" | "signup";
+  redirectTo?: string;
 };
 
-export function AuthCard({ activeTab }: AuthCardProps) {
+export function AuthCard({ activeTab, redirectTo = "/" }: AuthCardProps) {
   return (
     <div className="w-full max-w-md overflow-hidden rounded-xl border border-devlog-border bg-devlog-card shadow-2xl shadow-black/30">
       <div className="px-8 pt-8 text-center">
@@ -22,7 +23,11 @@ export function AuthCard({ activeTab }: AuthCardProps) {
       </div>
 
       <div className="px-8 py-8">
-        {activeTab === "login" ? <LoginForm /> : <SignupForm />}
+        {activeTab === "login" ? (
+          <LoginForm redirectTo={redirectTo} />
+        ) : (
+          <SignupForm />
+        )}
       </div>
 
       <p className="border-t border-devlog-border px-8 py-4 text-center text-xs leading-relaxed text-devlog-muted">

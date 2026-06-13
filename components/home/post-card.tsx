@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { formatPublishedDate } from "@/lib/posts/format";
+import { buildPostPath } from "@/lib/posts/slug";
 import type { Post } from "@/lib/posts/types";
 
 type PostCardProps = {
@@ -28,7 +29,7 @@ export function PostCard({ post }: PostCardProps) {
         ))}
       </div>
 
-      <Link href={`/posts/${post.slug}`} className="flex flex-1 flex-col">
+      <Link href={buildPostPath(post.slug)} className="flex flex-1 flex-col">
         <h3 className="mb-3 text-base font-semibold leading-snug text-devlog-text transition group-hover:text-devlog-accent">
           {post.title}
         </h3>

@@ -14,6 +14,7 @@ export type Post = {
   featured_image_url: string | null;
   author_name: string;
   author_avatar_url: string | null;
+  author_id: string | null;
   category_id: string | null;
   tags: string[];
   is_featured: boolean;

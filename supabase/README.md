@@ -56,6 +56,12 @@ supabase db reset   # 마이그레이션 + seed.sql 재적용
 
 ### RLS
 
-- `categories`: anon/authenticated 모두 SELECT
-- `posts`: `published_at`이 설정·과거인 글만 SELECT (공개 읽기)
-- `posts` INSERT/UPDATE/DELETE: authenticated 사용자 (향후 글쓰기 대비)
+| 테이블 | 정책 |
+|--------|------|
+| `categories` | anon/authenticated 모두 SELECT |
+| `posts` SELECT (anon) | `published_at`이 설정·과거인 글만 |
+| `posts` SELECT (authenticated) | 발행된 글 + `author_id = auth.uid()`인 본인 글 |
+| `posts` INSERT | authenticated, `author_id = auth.uid()`, `is_featured = false` |
+| `posts` UPDATE/DELETE | authenticated, 본인 글(`author_id = auth.uid()`)만 |
+
+`posts.author_id`는 Supabase Auth 사용자와 연결됩니다. 시드 데이터는 `author_id`가 NULL일 수 있습니다.

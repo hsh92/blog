@@ -4,6 +4,7 @@ import { AuthAlert } from "@/components/auth/auth-alert";
 import { AuthCard } from "@/components/auth/auth-card";
 import { AuthShell } from "@/components/auth/auth-shell";
 import { getAuthStatusMessage } from "@/lib/auth/messages";
+import { getSafeRedirectPath } from "@/lib/auth/redirect";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
@@ -16,21 +17,23 @@ type LoginPageProps = {
     tab?: string;
     error?: string;
     message?: string;
+    next?: string;
   }>;
 };
 
 export default async function LoginPage({ searchParams }: LoginPageProps) {
+  const params = await searchParams;
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
   if (user) {
-    redirect("/");
+    redirect(getSafeRedirectPath(params.next));
   }
 
-  const params = await searchParams;
   const activeTab = params.tab === "signup" ? "signup" : "login";
+  const redirectTo = getSafeRedirectPath(params.next);
   const statusMessage = getAuthStatusMessage(params.message);
   const errorMessage = params.error;
 
@@ -41,7 +44,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
         {statusMessage ? (
           <AuthAlert message={statusMessage} variant="success" />
         ) : null}
-        <AuthCard activeTab={activeTab} />
+        <AuthCard activeTab={activeTab} redirectTo={redirectTo} />
       </div>
     </AuthShell>
   );

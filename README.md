@@ -5,7 +5,7 @@
 **GitHub 저장소:** https://github.com/hsh92/blog  
 **기본 브랜치:** `master`
 
-현재 구현 범위: **홈 페이지(글 목록·필터·페이지네이션)**, **이메일 인증(로그인/회원가입)**, UI 디자인 목업(`design/`).
+현재 구현 범위: **홈 페이지(글 목록·필터·페이지네이션)**, **게시글 상세·댓글**, **마크다운 글쓰기(`/write`)**, **이메일 인증(로그인/회원가입)**, UI 디자인 목업(`design/`).
 
 ## 기술 스택
 
@@ -48,12 +48,20 @@ blog/
 │   │   ├── page.tsx            # 로그인/회원가입 (/login)
 │   │   ├── forgot/page.tsx     # 비밀번호 재설정 요청
 │   │   └── reset-password/page.tsx
+│   ├── write/
+│   │   ├── actions.ts          # 게시글 발행 Server Action
+│   │   └── page.tsx            # 마크다운 에디터 (/write)
+│   ├── posts/[slug]/
+│   │   ├── actions.ts          # 좋아요·저장·댓글
+│   │   └── page.tsx            # 게시글 상세
 │   ├── layout.tsx
 │   ├── page.tsx
 │   └── globals.css
 ├── components/
-│   ├── auth/                   # 인증 UI (Server Component)
+│   ├── auth/                   # 인증 UI
 │   ├── home/                   # 홈·글 목록 UI
+│   ├── post/                   # 게시글 상세 UI
+│   ├── write/                  # 마크다운 에디터 UI
 │   └── layout/                 # 헤더·푸터
 ├── lib/
 │   ├── auth/                   # 검증·한국어 메시지
@@ -73,7 +81,14 @@ blog/
 
 | 경로 | 용도 |
 |------|------|
-| `app/` (글쓰기 등) | 블로그 작성·관리 기능 |
+| `app/` (관리 등) | 게시글 수정·삭제·카테고리 관리 |
+
+## 글쓰기 (`/write`)
+
+로그인한 사용자만 접근할 수 있습니다. 마크다운 에디터와 실시간 미리보기로 작성 후 **발행**하면 Supabase `posts` 테이블에 저장되고 상세 페이지로 이동합니다.
+
+- 비로그인 접근 시 `/login?next=/write`로 리다이렉트
+- 헤더 **글쓰기** 링크(로그인 상태)
 
 ## Supabase DB 설정
 
@@ -264,6 +279,10 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## 변경 이력
 
+- **2026-06-13** — `posts.author_id` 및 로그인 사용자 글 생성 RLS 정책 마이그레이션 추가
+- **2026-06-13** — 한글 slug 조회 실패 수정 (slug 디코딩·ASCII slug 마이그레이션)
+- **2026-06-12** — 글 발행 시 한글 slug redirect 헤더 오류 수정 (클라이언트 네비게이션·ASCII slug)
+- **2026-06-12** — 마크다운 에디터·Supabase 발행 글쓰기 페이지(`/write`) 구현
 - **2026-06-12** — 게시글 상세 좋아요·저장·댓글 기능 추가 (Supabase engagement 스키마·RLS)
 - **2026-06-12** — 디자인 목업 기반 게시글 상세 페이지(제목·저자·썸네일·마크다운 본문·공유) 구현
 - **2026-06-12** — 시드/DB featured image Unsplash 404 URL 교체 (`react-19-concurrent-rendering`)

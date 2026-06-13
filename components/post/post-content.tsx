@@ -11,6 +11,11 @@ export function PostContent({ content }: PostContentProps) {
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
+          h1: ({ children }) => (
+            <h1 className="mb-6 text-3xl font-bold tracking-tight text-devlog-text first:mt-0">
+              {children}
+            </h1>
+          ),
           h2: ({ children }) => (
             <h2 className="mt-10 mb-4 text-xl font-bold tracking-tight text-devlog-text first:mt-0">
               {children}

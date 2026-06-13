@@ -3,6 +3,7 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { translateAuthError } from "@/lib/auth/messages";
+import { getSafeRedirectPath } from "@/lib/auth/redirect";
 import {
   validateEmail,
   validateLoginInput,
@@ -40,6 +41,7 @@ async function getOrigin() {
 export async function loginAction(formData: FormData) {
   const email = String(formData.get("email") ?? "");
   const password = String(formData.get("password") ?? "");
+  const next = getSafeRedirectPath(String(formData.get("next") ?? ""));
 
   const validation = validateLoginInput(email, password);
   if (!validation.valid) {
@@ -66,7 +68,7 @@ export async function loginAction(formData: FormData) {
     );
   }
 
-  redirect("/");
+  redirect(next);
 }
 
 export async function signupAction(formData: FormData) {

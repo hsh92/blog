@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Post } from "@/lib/posts/types";
+import { buildPostPath } from "@/lib/posts/slug";
 
 type FeaturedPostProps = {
   post: Post;
@@ -22,7 +23,7 @@ export function FeaturedPost({ post }: FeaturedPostProps) {
           </p>
           <div className="flex flex-wrap items-center gap-3">
             <Link
-              href={`/posts/${post.slug}`}
+              href={buildPostPath(post.slug)}
               className="inline-flex items-center gap-2 rounded-lg bg-devlog-accent px-5 py-2.5 text-sm font-medium text-devlog-bg transition hover:bg-sky-300"
             >
               전체 읽기

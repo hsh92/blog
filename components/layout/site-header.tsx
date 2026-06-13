@@ -60,6 +60,12 @@ export function SiteHeader({ userEmail }: SiteHeaderProps) {
         <div className="ml-auto flex shrink-0 items-center gap-3">
           {userEmail ? (
             <>
+              <Link
+                href="/write"
+                className="hidden text-sm text-devlog-muted transition hover:text-devlog-text sm:inline"
+              >
+                글쓰기
+              </Link>
               <span className="hidden max-w-[160px] truncate text-sm text-devlog-muted sm:inline">
                 {userEmail}
               </span>
