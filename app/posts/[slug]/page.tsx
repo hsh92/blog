@@ -1,21 +1,21 @@
-import Link from "next/link";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { PostDetail } from "@/components/post/post-detail";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
-import { formatPublishedDate } from "@/lib/posts/format";
+import { getPostComments, getPostEngagement } from "@/lib/posts/get-engagement";
 import { createClient } from "@/lib/supabase/server";
 
 type PostPageProps = {
   params: Promise<{ slug: string }>;
 };
 
-export default async function PostPage({ params }: PostPageProps) {
-  const { slug } = await params;
-  const supabase = await createClient();
+function getSiteUrl() {
+  return process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+}
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+async function getPost(slug: string) {
+  const supabase = await createClient();
 
   const { data: post } = await supabase
     .from("posts")
@@ -25,39 +25,64 @@ export default async function PostPage({ params }: PostPageProps) {
     .lte("published_at", new Date().toISOString())
     .maybeSingle();
 
+  return post;
+}
+
+export async function generateMetadata({
+  params,
+}: PostPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const post = await getPost(slug);
+
+  if (!post) {
+    return { title: "게시글을 찾을 수 없습니다" };
+  }
+
+  return {
+    title: post.title,
+    description: post.excerpt,
+    openGraph: {
+      title: post.title,
+      description: post.excerpt,
+      type: "article",
+      publishedTime: post.published_at ?? undefined,
+      images: post.featured_image_url ? [post.featured_image_url] : undefined,
+    },
+  };
+}
+
+export default async function PostPage({ params }: PostPageProps) {
+  const { slug } = await params;
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const post = await getPost(slug);
+
   if (!post) {
     notFound();
   }
 
+  const shareUrl = `${getSiteUrl()}/posts/${slug}`;
+
+  const [engagement, comments] = await Promise.all([
+    getPostEngagement(post.id, user?.id ?? null),
+    getPostComments(post.id),
+  ]);
+
   return (
     <div className="flex min-h-full flex-1 flex-col bg-devlog-bg text-devlog-text">
       <SiteHeader userEmail={user?.email} />
-      <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12 sm:px-6">
-        <Link
-          href="/"
-          className="mb-8 inline-flex text-sm text-devlog-muted transition hover:text-devlog-text"
-        >
-          ← 글 목록으로
-        </Link>
-        <article>
-          <header className="mb-8">
-            {post.categories && (
-              <span className="text-xs text-devlog-accent">
-                {post.categories.name}
-              </span>
-            )}
-            <h1 className="mt-2 text-3xl font-bold leading-tight">{post.title}</h1>
-            <p className="mt-4 text-sm text-devlog-muted">
-              {post.author_name} · {formatPublishedDate(post.published_at)}
-            </p>
-          </header>
-          <p className="leading-relaxed text-devlog-muted">{post.excerpt}</p>
-          {post.content && (
-            <div className="prose prose-invert mt-8 whitespace-pre-wrap leading-relaxed text-devlog-text">
-              {post.content}
-            </div>
-          )}
-        </article>
+      <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-10 sm:px-6 lg:py-14">
+        <PostDetail
+          post={post}
+          shareUrl={shareUrl}
+          engagement={engagement}
+          comments={comments}
+          isAuthenticated={Boolean(user)}
+        />
       </main>
       <SiteFooter />
     </div>

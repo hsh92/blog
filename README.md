@@ -264,6 +264,9 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## 변경 이력
 
+- **2026-06-12** — 게시글 상세 좋아요·저장·댓글 기능 추가 (Supabase engagement 스키마·RLS)
+- **2026-06-12** — 디자인 목업 기반 게시글 상세 페이지(제목·저자·썸네일·마크다운 본문·공유) 구현
+- **2026-06-12** — 시드/DB featured image Unsplash 404 URL 교체 (`react-19-concurrent-rendering`)
 - **2026-06-12** — README에 GitHub 초기화·저장소 생성·커밋·브랜치·PR 워크플로우 문서 추가
 - **2026-06-12** — GitHub 저장소 생성 및 master 푸시 (https://github.com/hsh92/blog)
 - **2026-06-12** — Supabase `PUBLISHABLE_KEY` 환경 변수명 호환 (`ANON_KEY`와 병행 지원)

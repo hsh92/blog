@@ -26,7 +26,7 @@ INSERT INTO public.posts (
     'React 19의 동시성 렌더링의 미래',
     'react-19-concurrent-rendering',
     'React 19의 새로운 reconciler 아키텍처가 동시성 렌더링과 서버 컴포넌트를 어떻게 바꾸는지, 그리고 개발자 경험에 어떤 변화가 오는지 살펴봅니다.',
-    'https://images.unsplash.com/photo-1511467687858-23d96c786e82?w=1200&h=800&fit=crop',
+    'https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=1200&h=800&fit=crop',
     'DevLog Team',
     'https://api.dicebear.com/7.x/avataaars/svg?seed=devlog',
     'a1000000-0000-4000-8000-000000000005',
